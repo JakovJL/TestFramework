@@ -1,6 +1,7 @@
 package com.testframework.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -20,7 +21,7 @@ public class BasePage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
-    protected void click(By locator) {
+    public void click(By locator) {
         logger.debug("Clicking element: {}", locator);
         waitForElementToBeClickable(locator).click();
     }
@@ -37,22 +38,39 @@ public class BasePage {
         return waitForElementToBeVisible(locator).getText();
     }
 
-    protected boolean isElementDisplayed(By locator) {
-        try {
-            return waitForElementToBeVisible(locator).isDisplayed();
-        } catch (Exception e) {
-            logger.debug("Element not displayed: {}", locator);
+    public boolean isElementDisplayed(By locator) {
+            if (waitForElementToBeVisible(locator).isDisplayed()){
+                logger.info("Element {} is displayed", locator);
+                return true;
+            } else {
+                logger.info("Element {} is not displayed", locator);
+                return false;
+            }
+    }
+
+    public boolean isElementClickable(By locator) {
+        if (waitForElementToBeClickable(locator).isEnabled()){
+            logger.info("Element {} is clickable", locator);
+            return true;
+        } else {
+            logger.info("Element {} is not clickable", locator);
             return false;
         }
     }
 
-    protected WebElement waitForElementToBeVisible(By locator) {
+    public boolean isImageBroken(WebElement imageElement) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        return (Boolean) js.executeScript("return arguments[0].naturalWidth === 0 || arguments[0].naturalHeight === 0;", imageElement);
+    }
+
+    public WebElement waitForElementToBeVisible(By locator) {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     protected WebElement waitForElementToBeClickable(By locator) {
         return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
+
 
     protected void waitForUrl(String urlPart) {
         logger.debug("Waiting for URL to contain: {}", urlPart);

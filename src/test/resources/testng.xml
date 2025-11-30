@@ -6,16 +6,11 @@
         <listener class-name="com.testframework.listeners.TestListener"/>
     </listeners>
 
-<!--    <test name="UI Tests - Basic">-->
-<!--        <classes>-->
-<!--            <class name="com.testframework.tests.ui.LoginTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
-
-<!--    <test name="UI Tests - Advanced">-->
-<!--        <classes>-->
-<!--            <class name="com.testframework.tests.ui.AdvancedLoginTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <test name="Welcome Page Tests">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="com.testframework.tests.ui.WelcomePageTest"/>
+        </classes>
+    </test>
 
 </suite>
