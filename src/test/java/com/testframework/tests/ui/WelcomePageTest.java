@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.testframework.pages.InternetCommonPage.CHALLENGING_DOM;
+import static com.testframework.pages.InternetCommonPage.*;
 
 public class WelcomePageTest extends BaseTest {
 
@@ -105,6 +105,31 @@ public class WelcomePageTest extends BaseTest {
         Assert.assertEquals(secRow.get(1),"Apeirian1");
     }
 
+    @Test
+    public void checkboxTest() throws InterruptedException {
+        internetCommonPage.click(CHECKBOXES);
+        String checkbox1 ="//input[@type='checkbox'][1]";
+        String checkbox2 ="//input[@type='checkbox'][2]";
+        Assert.assertTrue(internetCommonPage.isNotChecked(By.xpath(checkbox1)),"checkbox is selected");
+        internetCommonPage.click(By.xpath(checkbox1));
+        Assert.assertTrue(internetCommonPage.isChecked(By.xpath(checkbox1)),"checkbox is not selected");
+        internetCommonPage.click(By.xpath(checkbox2));
+        Assert.assertTrue(internetCommonPage.isNotChecked(By.xpath(checkbox2)),"checkbox is selected");
+    }
 
+    @Test
+    public void jsAlertTest() throws InterruptedException {
+        internetCommonPage.click(CONTEXT_MENU);
+        String hotSpot = "//div[@id='hot-spot']";
+
+        Assert.assertEquals(internetCommonPage.rightClick(By.xpath(hotSpot)).getAlertText(),
+                "You selected a context menu","wrong alert text");
+
+        internetCommonPage.acceptAlert();
+        Assert.assertEquals(internetCommonPage.getText(By.xpath("//p[text()='Context menu items are custom" +
+                " additions that appear in the right-click menu.']")),"Context menu items are custom additions that appear in the right-click menu.");
+
+        Thread.sleep(2000);
+    }
 
 }
