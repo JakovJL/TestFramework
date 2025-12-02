@@ -11,7 +11,9 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.testframework.pages.InternetCommonPage.*;
 
@@ -130,6 +132,21 @@ public class WelcomePageTest extends BaseTest {
                 " additions that appear in the right-click menu.']")),"Context menu items are custom additions that appear in the right-click menu.");
 
         Thread.sleep(2000);
+    }
+
+    //ul/li
+    @Test
+    public void disappearingElementsTest(){
+        internetCommonPage.click(DISAPPEARING_ELEMENTS);
+        List<WebElement> buttons= driver.findElements(By.xpath("//ul/li"));
+
+        Assert.assertEquals(buttons.size(),5,"Button count less then 5");
+        List<String> expectedTexts = Arrays.asList("Home", "About", "Contact Us", "Portfolio", "Gallery");
+        List<String> actualTexts = buttons.stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
+        Assert.assertTrue(actualTexts.containsAll(expectedTexts),
+                "not all buttons presence: " + actualTexts);
     }
 
 }
