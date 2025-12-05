@@ -1,9 +1,7 @@
 package com.testframework.tests.ui;
 
 import com.testframework.core.BaseTest;
-import com.testframework.pages.AddRemovePage;
-import com.testframework.pages.ChallengingDomPage;
-import com.testframework.pages.InternetCommonPage;
+import com.testframework.pages.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -134,7 +132,6 @@ public class WelcomePageTest extends BaseTest {
         Thread.sleep(2000);
     }
 
-    //ul/li
     @Test
     public void disappearingElementsTest(){
         internetCommonPage.click(DISAPPEARING_ELEMENTS);
@@ -148,5 +145,26 @@ public class WelcomePageTest extends BaseTest {
         Assert.assertTrue(actualTexts.containsAll(expectedTexts),
                 "not all buttons presence: " + actualTexts);
     }
+
+    @Test
+    public void  dragAndDropTest() throws InterruptedException {
+        internetCommonPage.click(DRAG_AND_DROP);
+        DragAndDrop dragAndDrop = new DragAndDrop(driver);
+        Assert.assertEquals(driver.findElement(DragAndDrop.headerA).getText(),"A");
+        Assert.assertEquals(driver.findElement(DragAndDrop.headerB).getText(),"B");
+        dragAndDrop.dragAndDrop();
+        Thread.sleep(5000);
+        Assert.assertEquals(driver.findElement(DragAndDrop.headerA).getText(),"B");
+        Assert.assertEquals(driver.findElement(DragAndDrop.headerB).getText(),"A");
+    }
+
+    @Test
+    public void dropDawnTest() throws InterruptedException {
+        internetCommonPage.click(DROPDOWN);
+        DropdawnPage dropdawnPage = new DropdawnPage(driver);
+        dropdawnPage.click(DropdawnPage.DROPDOWN).click(DropdawnPage.option2);
+        Assert.assertTrue(dropdawnPage.isSelected(DropdawnPage.option2),"drop down is not selected");
+    }
+
 
 }

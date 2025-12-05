@@ -77,6 +77,19 @@ public class BasePage {
         }
     }
 
+    public boolean isSelected(By locator) {
+        wait.until(ExpectedConditions.elementToBeSelected(locator));
+        logger.info("Element {} is selected", locator);
+        return true;
+    }
+
+    public boolean isNotSelected(By locator) {
+        wait.until(ExpectedConditions.elementToBeSelected(locator));
+        logger.info("Element {} is selected", locator);
+        return false;
+    }
+
+
     public boolean isImageBroken(WebElement imageElement) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         return (Boolean) js.executeScript("return arguments[0].naturalWidth === 0 || arguments[0].naturalHeight === 0;", imageElement);
@@ -100,5 +113,19 @@ public class BasePage {
         logger.debug("Checking if checkbox is not selected: {}", locator);
         WebElement element = waitForElementToBeVisible(locator);
         return !element.isSelected();
+    }
+
+    public void dragAndDrop(By locator, By locator2) {
+        logger.debug("Drag and dropping element: {}", locator);
+        WebElement element = waitForElementToBeVisible(locator);
+        WebElement element2 = waitForElementToBeVisible(locator2);
+        Actions actions = new Actions(driver);
+        actions.dragAndDrop(element,element2).perform();
+    }
+
+    public void dragAndDrop(WebElement element, WebElement element2) {
+        logger.debug("Drag and dropping element: {}", element);
+        Actions actions = new Actions(driver);
+        actions.dragAndDrop(element,element2).perform();
     }
 }
