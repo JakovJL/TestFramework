@@ -3,7 +3,6 @@ package com.testframework.tests.ui;
 import com.testframework.core.BaseTest;
 import com.testframework.pages.*;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -166,5 +165,33 @@ public class WelcomePageTest extends BaseTest {
         Assert.assertTrue(dropdawnPage.isSelected(DropdawnPage.option2),"drop down is not selected");
     }
 
+    @Test
+    public void dynamicContentTest(){
+        internetCommonPage.click(DYNAMIC_CONTENT);
+        DynamicContentPage dynamicContentPage1 = new DynamicContentPage(driver);
+        String s1 = dynamicContentPage1.getDynamicContent().get(0).getText();
+        driver.navigate().refresh();
+        String s2 = dynamicContentPage1.getDynamicContent().get(0).getText();
+        Assert.assertNotEquals(s1,s2,"messages are equal");
+
+    }
+
+    @Test
+    public void dynamicControlsTest(){
+        internetCommonPage.click(DYNAMIC_CONTROLS);
+        DynamicControlsPage dynamicControlsPage1 = new DynamicControlsPage(driver);
+        Assert.assertTrue(dynamicControlsPage1.isNotChecked(DynamicControlsPage.checkbox),"checkbox is selected");
+        dynamicControlsPage1.click(DynamicControlsPage.checkbox);
+        Assert.assertTrue(dynamicControlsPage1.isChecked(DynamicControlsPage.checkbox),"checkbox is not selected");
+        Assert.assertTrue(dynamicControlsPage1.isSelected(DynamicControlsPage.checkbox),"checkbox is not selected");
+
+        dynamicControlsPage1.click(DynamicControlsPage.removeCheckboxButton);
+        Assert.assertTrue(dynamicControlsPage1.isElementNotDisplayed(DynamicControlsPage.checkbox),"checkbox is displayed");
+
+        Assert.assertTrue(dynamicControlsPage1.isElementNotClickable(DynamicControlsPage.inputField));
+        dynamicControlsPage1.click(DynamicControlsPage.disableButton);
+        Assert.assertTrue(dynamicControlsPage1.isElementClickable(DynamicControlsPage.inputField));
+
+    }
 
 }

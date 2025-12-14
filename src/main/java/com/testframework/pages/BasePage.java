@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 
 public class BasePage {
-    protected WebDriver driver;
+    protected static WebDriver driver;
     protected WebDriverWait wait;
     protected static final Logger logger = LoggerFactory.getLogger(BasePage.class);
 
@@ -23,13 +23,13 @@ public class BasePage {
     }
 
     public BasePage click(By locator) {
-        logger.debug("Clicking element: {}", locator);
+        logger.info("Clicking element: {}", locator);
         waitForElementToBeClickable(locator).click();
         return this;
     }
 
     public BasePage rightClick(By locator) {
-        logger.debug("Right-clicking element: {}", locator);
+        logger.info("Right-clicking element: {}", locator);
         WebElement element = waitForElementToBeClickable(locator);
         Actions actions = new Actions(driver);
         actions.contextClick(element).perform();
@@ -67,6 +67,15 @@ public class BasePage {
             }
     }
 
+    public boolean isElementNotDisplayed(By locator) {
+        if (waitForElementToBeInvisible(locator)){
+            logger.info("Element {} is not displayed", locator);
+            return true;
+        }
+        else logger.info("Element {} is displayed", locator);
+        return false;
+    }
+
     public boolean isElementClickable(By locator) {
         if (waitForElementToBeClickable(locator).isEnabled()){
             logger.info("Element {} is clickable", locator);
@@ -77,6 +86,19 @@ public class BasePage {
         }
     }
 
+    public boolean isElementNotClickable(By locator) {
+        logger.debug("Checking if element is not clickable: {}", locator);
+        try {
+            wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(locator)));
+            logger.info("Element {} is not clickable", locator);
+            return true;
+        } catch (org.openqa.selenium.TimeoutException e) {
+            logger.info("Element {} is still clickable", locator);
+            return false;
+        }
+    }
+
+
     public boolean isSelected(By locator) {
         wait.until(ExpectedConditions.elementToBeSelected(locator));
         logger.info("Element {} is selected", locator);
@@ -84,11 +106,10 @@ public class BasePage {
     }
 
     public boolean isNotSelected(By locator) {
-        wait.until(ExpectedConditions.elementToBeSelected(locator));
-        logger.info("Element {} is selected", locator);
-        return false;
+        wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeSelected(locator)));
+        logger.info("Element {} is not selected", locator);
+        return true;
     }
-
 
     public boolean isImageBroken(WebElement imageElement) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -103,16 +124,24 @@ public class BasePage {
         return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
+    public boolean waitForElementToBeInvisible(By locator) {
+        return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+    }
+
     public boolean isChecked(By locator) {
         logger.debug("Checking if checkbox is selected: {}", locator);
         WebElement element = waitForElementToBeVisible(locator);
+        boolean isSelected = element.isSelected();
+        logger.info("Element {} is {}selected", locator, isSelected ? "" : "not ");
         return element.isSelected();
     }
 
     public boolean isNotChecked(By locator) {
         logger.debug("Checking if checkbox is not selected: {}", locator);
         WebElement element = waitForElementToBeVisible(locator);
-        return !element.isSelected();
+        boolean isSelected = element.isSelected();
+        logger.info("Element {} is {}selected", locator, isSelected ? "" : "not ");
+        return !isSelected;
     }
 
     public void dragAndDrop(By locator, By locator2) {
