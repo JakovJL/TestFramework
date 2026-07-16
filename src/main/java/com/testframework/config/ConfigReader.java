@@ -28,18 +28,21 @@ public class ConfigReader {
     }
 
     public static String getBrowser() {
-        return getProperty("browser");
+        String override = System.getProperty("browser");
+        return override != null ? override : getProperty("browser");
     }
 
     public static boolean isHeadless() {
-        return Boolean.parseBoolean(getProperty("headless"));
+        String override = System.getProperty("headless");
+        return override != null ? Boolean.parseBoolean(override)
+                : Boolean.parseBoolean(getProperty("headless"));
     }
 
     public static String getBaseUrl() {
         return getProperty("base.url");
     }
 
-    public static String getInternetUrl(){
+    public static String getInternetUrl() {
         return getProperty("internet.url");
     }
 

@@ -1,6 +1,6 @@
 package com.testframework.tests.ui;
 
-import com.testframework.core.BaseTest;
+import com.testframework.core.BaseUiTest;
 import com.testframework.pages.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static com.testframework.pages.InternetCommonPage.*;
 
-public class WelcomePageTest extends BaseTest {
+public class WelcomePageUiTest extends BaseUiTest {
 
     private InternetCommonPage internetCommonPage;
 

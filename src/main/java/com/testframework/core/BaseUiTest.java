@@ -8,8 +8,8 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-public class BaseTest {
-    protected static final Logger logger = LoggerFactory.getLogger(BaseTest.class);
+public class BaseUiTest {
+    protected static final Logger logger = LoggerFactory.getLogger(BaseUiTest.class);
     protected WebDriver driver;
 
     @BeforeMethod
